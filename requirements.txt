@@ -6,3 +6,4 @@ python-dotenv
 pre-commit
 pypdf
 faiss-cpu
+modal-client

@@ -1,5 +1,6 @@
 import os
 import dotenv
+import openai
 from pathlib import Path
 from tqdm.auto import tqdm
 from langchain.vectorstores import FAISS
@@ -37,7 +38,6 @@ db = None
 
 # Iterate over all the files
 for idx, path in enumerate(tqdm(os.listdir(DATA_DIR))):
-
     # Load the current PDF
     loader = PyPDFLoader(str(DATA_DIR / path))
     doc = loader.load()
@@ -51,10 +51,13 @@ for idx, path in enumerate(tqdm(os.listdir(DATA_DIR))):
     # Run the summarization chain
     summary = summarize_document_chain.run([full_doc.page_content])
 
-    # Create a new summary doc
-    summary_doc = Document(
-        page_content=summary, metadata={"source": doc[0].metadata["source"]}
-    )
+    try:
+        # Create a new summary doc
+        summary_doc = Document(
+            page_content=summary, metadata={"source": doc[0].metadata["source"]}
+        )
+    except openai.error.InvalidRequestError:
+        continue
 
     # Write the intermediary result to json (optional)
     with open(SUMMARY_DIR / str(path.split(".")[0] + ".json"), "w") as f:
