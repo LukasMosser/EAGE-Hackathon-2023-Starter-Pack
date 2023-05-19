@@ -1,0 +1,8 @@
+openai
+langchain
+unstructured
+tiktoken
+python-dotenv
+pre-commit
+pypdf
+faiss-cpu
