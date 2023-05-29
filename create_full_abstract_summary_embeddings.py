@@ -48,27 +48,31 @@ for idx, path in enumerate(tqdm(os.listdir(DATA_DIR))):
         page_content=raw_text, metadata={"source": doc[0].metadata["source"]}
     )
 
-    # Run the summarization chain
-    summary = summarize_document_chain.run([full_doc.page_content])
-
     try:
+        # Run the summarization chain
+        summary = summarize_document_chain.run([full_doc.page_content])
+
         # Create a new summary doc
         summary_doc = Document(
             page_content=summary, metadata={"source": doc[0].metadata["source"]}
         )
-    except openai.error.InvalidRequestError:
+
+        # Write the intermediary result to json (optional)
+        with open(SUMMARY_DIR / str(path.split(".")[0] + ".json"), "w") as f:
+            f.write(summary_doc.json())
+
+        if db is None:
+            # If no db has been created yet, create the db
+            db = FAISS.from_documents([summary_doc], embedding=embeddings)
+        else:
+            # Else just add the new generated summary
+            db.add_documents([summary_doc])
+
+    except (openai.error.InvalidRequestError, openai.error.APIError) as error:
+        print(error)
+        print(path)
         continue
 
-    # Write the intermediary result to json (optional)
-    with open(SUMMARY_DIR / str(path.split(".")[0] + ".json"), "w") as f:
-        f.write(summary_doc.json())
-
-    if db is None:
-        # If no db has been created yet, create the db
-        db = FAISS.from_documents([summary_doc], embedding=embeddings)
-    else:
-        # Else just add the new generated summary
-        db.add_documents([summary_doc])
 
 # Save Vector DB to local disk
 db.save_local(SUMMARY_VECTORDB_PATH)
