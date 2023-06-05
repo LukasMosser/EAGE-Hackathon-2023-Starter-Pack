@@ -1,4 +1,4 @@
-data/
+data/vectordb/eage_annual_2023_chunks_basic_test
 .idea/
 .env
 __pycache__/
