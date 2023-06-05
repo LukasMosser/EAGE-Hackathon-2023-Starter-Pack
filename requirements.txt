@@ -7,3 +7,7 @@ pre-commit
 pypdf
 faiss-cpu
 modal-client
+streamlit
+pip
+nemoguardrails
+pandas
