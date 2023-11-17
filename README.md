@@ -14,7 +14,7 @@ The [EAGE has made available all of the abstracts from the EAGE Annual 2023](htt
 
 From this two starter vector databases have been created.
 
-These are intended to serve beginners or those that dont have the necessary API or computational resources to create their own embeddings.
+These are intended to serve beginners or those that don't have the necessary API or computational resources to create their own embeddings.
 - VectorDB of chunked paper parts: [GDrive](https://drive.google.com/drive/folders/1zw9-kiMypuyj09aWBXQKKtik3wIQsCRK?usp=sharing)
 - VectorDB of paper summaries generated with langchain: [GDrive](https://drive.google.com/drive/folders/1zw9-kiMypuyj09aWBXQKKtik3wIQsCRK?usp=sharing)
 
